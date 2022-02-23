@@ -187,7 +187,7 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 			DialContext:           dialer.DialContext,
 			TLSHandshakeTimeout:   120 * time.Second,
 			ResponseHeaderTimeout: 120 * time.Second,
-			ExpectContinueTimeout: 2 * time.Second,
+			ExpectContinueTimeout: 120 * time.Second,
 			ForceAttemptHTTP2:     true,
 		}
 		if am.TrustedRoots != nil {
@@ -374,7 +374,7 @@ var (
 
 	// RateLimitEventsWindow is the size of the sliding
 	// window that throttles events.
-	RateLimitEventsWindow = 10 * time.Second
+	RateLimitEventsWindow = 60 * time.Second
 )
 
 // Some default values passed down to the underlying ACME client.
