@@ -165,7 +165,7 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 
 	// set up the dialers and resolver for the ACME client's HTTP client
 	dialer := &net.Dialer{
-		Timeout:   30 * time.Second,
+		Timeout:   120 * time.Second,
 		KeepAlive: 2 * time.Minute,
 	}
 	if am.Resolver != "" {
@@ -173,7 +173,7 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 			PreferGo: true,
 			Dial: func(ctx context.Context, network, _ string) (net.Conn, error) {
 				return (&net.Dialer{
-					Timeout: 15 * time.Second,
+					Timeout: 120 * time.Second,
 				}).DialContext(ctx, network, am.Resolver)
 			},
 		}
@@ -185,8 +185,8 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 		transport := &http.Transport{
 			Proxy:                 http.ProxyFromEnvironment,
 			DialContext:           dialer.DialContext,
-			TLSHandshakeTimeout:   15 * time.Second,
-			ResponseHeaderTimeout: 15 * time.Second,
+			TLSHandshakeTimeout:   120 * time.Second,
+			ResponseHeaderTimeout: 120 * time.Second,
 			ExpectContinueTimeout: 2 * time.Second,
 			ForceAttemptHTTP2:     true,
 		}
