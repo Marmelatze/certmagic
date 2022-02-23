@@ -380,5 +380,5 @@ var (
 // Some default values passed down to the underlying ACME client.
 var (
 	UserAgent   string
-	HTTPTimeout = 60 * time.Second
+	HTTPTimeout = 120 * time.Second
 )
