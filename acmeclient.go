@@ -165,7 +165,7 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 
 	// set up the dialers and resolver for the ACME client's HTTP client
 	dialer := &net.Dialer{
-		Timeout:   120 * time.Second,
+		Timeout:   30 * time.Second,
 		KeepAlive: 2 * time.Minute,
 	}
 	if am.Resolver != "" {
@@ -173,7 +173,7 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 			PreferGo: true,
 			Dial: func(ctx context.Context, network, _ string) (net.Conn, error) {
 				return (&net.Dialer{
-					Timeout: 120 * time.Second,
+					Timeout: 15 * time.Second,
 				}).DialContext(ctx, network, am.Resolver)
 			},
 		}
@@ -185,9 +185,9 @@ func (am *ACMEManager) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 		transport := &http.Transport{
 			Proxy:                 http.ProxyFromEnvironment,
 			DialContext:           dialer.DialContext,
-			TLSHandshakeTimeout:   120 * time.Second,
-			ResponseHeaderTimeout: 120 * time.Second,
-			ExpectContinueTimeout: 120 * time.Second,
+			TLSHandshakeTimeout:   HTTPTimeout,
+			ResponseHeaderTimeout: HTTPTimeout,
+			ExpectContinueTimeout: 2 * time.Second,
 			ForceAttemptHTTP2:     true,
 		}
 		if am.TrustedRoots != nil {
@@ -374,11 +374,11 @@ var (
 
 	// RateLimitEventsWindow is the size of the sliding
 	// window that throttles events.
-	RateLimitEventsWindow = 60 * time.Second
+	RateLimitEventsWindow = 10 * time.Second
 )
 
 // Some default values passed down to the underlying ACME client.
 var (
 	UserAgent   string
-	HTTPTimeout = 120 * time.Second
+	HTTPTimeout = 30 * time.Second
 )
