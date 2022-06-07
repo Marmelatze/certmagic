@@ -165,7 +165,7 @@ func (iss *ACMEIssuer) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 
 	// set up the dialers and resolver for the ACME client's HTTP client
 	dialer := &net.Dialer{
-		Timeout:   30 * time.Second,
+		Timeout:   120 * time.Second,
 		KeepAlive: 2 * time.Minute,
 	}
 	if iss.Resolver != "" {
@@ -173,7 +173,7 @@ func (iss *ACMEIssuer) newACMEClient(useTestCA bool) (*acmez.Client, error) {
 			PreferGo: true,
 			Dial: func(ctx context.Context, network, _ string) (net.Conn, error) {
 				return (&net.Dialer{
-					Timeout: 15 * time.Second,
+					Timeout: 120 * time.Second,
 				}).DialContext(ctx, network, iss.Resolver)
 			},
 		}
@@ -380,5 +380,5 @@ var (
 // Some default values passed down to the underlying ACME client.
 var (
 	UserAgent   string
-	HTTPTimeout = 30 * time.Second
+	HTTPTimeout = 120 * time.Second
 )
